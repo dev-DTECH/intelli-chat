@@ -35,7 +35,7 @@ const firestore = firebase.firestore;
 function App() {
     const [user, loading, error] = useAuthState(auth);
     if (user) {
-        socket = io(`ws://localhost:3000`, {
+        socket = io(`ws://${window.location.host}`, {
             reconnectionDelayMax: 10000,
         });
         socket.emit("login", {

@@ -1,43 +1,43 @@
-let PORT = process.env.PORT || 3000,
+const { Server } = require("socket.io");
+
+const PORT = process.env.PORT || 3000,
     express = require('express'),
     fs = require("fs"),
     app = require('express')(),
-    server = require('http').Server(app);
-    // siofu = require("socketio-file-upload");
-
-// let passport = require("passport");
-// const GoogleStrategy = require("passport-google-oauth20").Strategy;
-// const keys = require("./config");
-
-
-let io = require("socket.io")(server);
-server.listen(PORT);
-console.log(`Server online at http://localhost:${PORT}`);
-
+    http = require('http');
+const server = http.createServer(app);
+// const io = new Server(PORT);
+const io = new Server(server);
 app.use(express.static('build'))
-// app.use(express.static('./public/uploads'))
-
-
-// app.use(siofu.router)
 
 app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/public/index.html');
+    res.sendFile(__dirname + '/build/index.html');
 });
 
 let numuser = 0,
     chat=[];
 
 io.on("connection", socket => {
-    // console.log("user connected");
 
     numuser++;
-    console.log("Number of user: " + numuser);
+    // console.log("Number of user: " + numuser);
     socket.emit("receive-chat-history",chat)
 
     // socket.emit("receive-chat",chat);
 
-    socket.on("send-chat",data=>{
-        socket.broadcast.emit('receive-chat',data)
+    socket.on("login",data=>{
+        console.log(data);
+        console.log(`[${data.name}] Connected`)
+
+        // socket.broadcast.emit('receive-chat',data)
+        // console.log(`[${data.sender}] ${data.message}`)
+        // chat.push(data)
+        // console.log(chat)
+    })
+    socket.on("message",data=>{
+        console.log(data)
+        // socket.broadcast.emit('receive-chat',data)
+        console.log(`[${data.user}] ${data.message}`)
         chat.push(data)
         // console.log(chat)
     })
@@ -62,4 +62,7 @@ io.on("connection", socket => {
     //     numuser--;
     //     console.log("Number of user: " + numuser);
     // });
+});
+server.listen(PORT, () => {
+    console.log(`Server online at http://localhost:${PORT}`);
 });

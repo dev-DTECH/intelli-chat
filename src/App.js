@@ -13,16 +13,8 @@ import {useCollectionData} from 'react-firebase-hooks/firestore';
 import {initializeApp} from "firebase/app";
 import {getAnalytics} from "firebase/analytics";
 
-const socket = io(`ws://localhost:3000`, {
-    reconnectionDelayMax: 10000,
-    // auth: {
-    //     token: "123"
-    // },
-    // query: {
-    //     "my-key": "my-value"
-    // }
-});
-socket.emit("ping")
+let socket
+// socket.emit("ping")
 const firebaseConfig = {
     apiKey: "AIzaSyAqY2IJXJqf9cgaApnF2rs5ur7sDsP0LU4",
     authDomain: "intellichat-32022.firebaseapp.com",
@@ -42,6 +34,17 @@ const firestore = firebase.firestore;
 
 function App() {
     const [user, loading, error] = useAuthState(auth);
+    if (user) {
+        socket = io(`ws://localhost:3000`, {
+            reconnectionDelayMax: 10000,
+        });
+        socket.emit("login", {
+            name: user.displayName,
+            uid: user.uid,
+            email: user.email
+
+        })
+    }
 
     return (
         <div className="App">
@@ -60,6 +63,7 @@ function App() {
 
 function SignIn() {
     const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+
     return (
         <>
             <button className="sign-in" onClick={() => signInWithGoogle()}>Sign in with Google</button>
@@ -88,11 +92,16 @@ class ChatRoom extends Component {
             formValue: ""
         }
     }
+
     sendMessage(e) {
         e.preventDefault();
         console.log(this.state)
 
-        const {uid, photoURL} = auth.currentUser;
+        const {uid, displayName, photoURL} = auth.currentUser;
+        socket.emit("message", {
+            user: displayName,
+            message: this.state.formValue
+        })
         this.state.messages.push({
             text: this.state.formValue,
             // createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -101,27 +110,25 @@ class ChatRoom extends Component {
         })
         this.textRef.current.value = ""
         this.state.formValue = ""
-        this.setState(prevState=>{
+        this.setState(prevState => {
             return this.state;
         })
         this.dummyRef.current.scrollIntoView({behavior: 'smooth'});
     }
-    typeMessage(e){
+
+    typeMessage(e) {
         e.preventDefault();
-        this.state.formValue= e.target.value;
-        this.setState(prevState=>{
+        this.state.formValue = e.target.value;
+        this.setState(prevState => {
             return this.state;
         })
         console.log(this.state)
     }
+
     render() {
 
 
         // const dummy = useRef();
-
-
-
-
 
 
         return (<>

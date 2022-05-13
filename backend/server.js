@@ -1,4 +1,5 @@
-const { Server } = require("socket.io");
+const {Server} = require("socket.io");
+const chalk = require('chalk');
 
 const PORT = process.env.PORT || 3000,
     express = require('express'),
@@ -15,39 +16,38 @@ app.get('/', function (req, res) {
 });
 
 let numuser = 0,
-    chat=[];
+    chat = [];
 
 io.on("connection", socket => {
 
     numuser++;
     // console.log("Number of user: " + numuser);
-    socket.emit("receive-chat-history",chat)
+    socket.emit("receive-chat-history", chat)
 
     // socket.emit("receive-chat",chat);
 
-    socket.on("login",data=>{
+    socket.on("login", data => {
         console.log(data);
-        console.log(`[${data.name}] Connected`)
-
-        // socket.broadcast.emit('receive-chat',data)
-        // console.log(`[${data.sender}] ${data.message}`)
-        // chat.push(data)
-        // console.log(chat)
+        console.log(`[${chalk.green("+")}] [${data.name}]`)
     })
-    socket.on("message",data=>{
+    socket.on("disconnect", reason => {
+        console.log(`[${chalk.red("-")}] [${"data.name"}] ${reason}`)
+    })
+    socket.on("message", data => {
         console.log(data)
-        // socket.broadcast.emit('receive-chat',data)
-        console.log(`[${data.user}] ${data.message}`)
+
+        socket.broadcast.emit('message',data)
+        console.log(`public > [${data.user}] ${data.message}`)
         chat.push(data)
         // console.log(chat)
     })
-    socket.on("send-file",data=>{
-        socket.broadcast.emit('receive-chat',data)
+    socket.on("send-file", data => {
+        socket.broadcast.emit('receive-chat', data)
         chat.push(data)
         // console.log(chat)
     })
-    socket.on("send-video-stream",data=>{
-        socket.broadcast.emit('receive-video-stream',data)
+    socket.on("send-video-stream", data => {
+        socket.broadcast.emit('receive-video-stream', data)
         // chat.push(data)
         // console.log(chat)
     })
@@ -63,6 +63,7 @@ io.on("connection", socket => {
     //     console.log("Number of user: " + numuser);
     // });
 });
-server.listen(PORT, () => {
-    console.log(`Server online at http://localhost:${PORT}`);
+server.listen(PORT, h => {
+    console.log(h)
+    console.log(`Server Online -> http://localhost:${PORT}`);
 });

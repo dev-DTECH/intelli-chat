@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
+    "chalk": "^4.1.2",
     "express": "^4.18.1",
     "firebase": "^9.8.0",
     "react": "^18.1.0",
@@ -19,6 +20,7 @@
   "scripts": {
     "start": "node ./backend/server.js",
     "dev": "react-scripts start",
+    "serverDev": "nodemon ./backend/server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

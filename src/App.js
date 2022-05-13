@@ -35,15 +35,17 @@ const firestore = firebase.firestore;
 function App() {
     const [user, loading, error] = useAuthState(auth);
     if (user) {
-        socket = io(`wss://${window.location.host}`, {
+        socket = io(`ws://${window.location.host}`, {
             reconnectionDelayMax: 10000,
         });
         socket.emit("login", {
             name: user.displayName,
             uid: user.uid,
-            email: user.email
+            email: user.email,
+            photoURL: user.photoURL
 
         })
+
     }
 
     return (
@@ -87,10 +89,29 @@ class ChatRoom extends Component {
         this.textRef = React.createRef();
         this.sendMessage = this.sendMessage.bind(this);
         this.typeMessage = this.typeMessage.bind(this);
+        this.receiveMessage = this.receiveMessage.bind(this);
         this.state = {
             messages: [],
             formValue: ""
         }
+    }
+
+    componentDidMount() {
+        socket.on("message", data => {
+            this.receiveMessage(data)
+        })
+    }
+
+    receiveMessage(data) {
+        this.state.messages.push({
+            text: data.message,
+            uid: data.uid,
+            photoURL: data.photoURL
+        })
+        this.setState(prevState => {
+            return this.state;
+        })
+        this.dummyRef.current.scrollIntoView({behavior: 'smooth'});
     }
 
     sendMessage(e) {

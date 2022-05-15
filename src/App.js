@@ -43,9 +43,7 @@ function App() {
             uid: user.uid,
             email: user.email,
             photoURL: user.photoURL
-
         })
-
     }
 
     return (
@@ -54,11 +52,9 @@ function App() {
                 <h1>🧠intelliChat</h1>
                 <SignOut/>
             </header>
-
             <section>
                 {user ? <ChatRoom/> : <SignIn/>}
             </section>
-
         </div>
     );
 }
@@ -71,7 +67,6 @@ function SignIn() {
             <button className="sign-in" onClick={() => signInWithGoogle()}>Sign in with Google</button>
         </>
     )
-
 }
 
 function SignOut() {
@@ -97,7 +92,7 @@ class ChatRoom extends Component {
     }
 
     componentDidMount() {
-        socket.on("message", data => {
+        socket.on("chat", data => {
             this.receiveMessage(data)
         })
     }
@@ -119,7 +114,7 @@ class ChatRoom extends Component {
         console.log(this.state)
 
         const {uid, displayName, photoURL} = auth.currentUser;
-        socket.emit("message", {
+        socket.emit("chat", {
             user: displayName,
             message: this.state.formValue
         })

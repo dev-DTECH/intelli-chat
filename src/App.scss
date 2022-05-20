@@ -1,39 +1,50 @@
 body {
-  background-color: #282c34;
+  background-color: black;
 }
 
 .App {
   text-align: center;
-  max-width: 728px;
+  //max-width: 728px;
   margin: 0 auto;
-}
+  header {
 
-.App header {
-  background-color: #181717;
-  height: 10vh;
-  min-height: 50px;
-  color: white;
-  position: fixed;
-  width: 100%;
-  max-width: 728px;
-  top: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  z-index: 99;
-  padding: 10px;
-  box-sizing: border-box;
-}
+    //background-color: #181717;
+    height: 10vh;
+    min-height: 50px;
+    color: white;
+    position: fixed;
+    width: 100%;
+    //max-width: 728px;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 99;
+    padding: 10px;
+    box-sizing: border-box;
+  .profile{
+    display: flex;
+    align-items: center;
 
-.App section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: rgb(40, 37, 53);
+    //flex-direction: column;
+  }
+    .profile:hover{
+      background: rgb(50, 50, 50);
+    }
+  }
+
+  section {
+    //background-color: aquamarine;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+  }
 }
 
 main {
+  background-color: rgb(54, 50, 47);
+  border-radius: 10px;
   padding: 10px;
   height: 80vh;
   margin: 10vh 0 10vh;
@@ -47,7 +58,7 @@ main::-webkit-scrollbar {
 }
 
 main::-webkit-scrollbar-track {
-  background: #1e1e24;
+  //background: #1e1e24;
 }
 
 main::-webkit-scrollbar-thumb {
@@ -60,7 +71,7 @@ form {
   bottom: 0;
   background-color: rgb(24, 23, 23);
   width: 100%;
-  max-width: 728px;
+  //max-width: 728px;
   display: flex;
   font-size: 1.5rem;
 }
@@ -75,7 +86,7 @@ input {
   line-height: 1.5;
   width: 100%;
   font-size: 1.5rem;
-  background: rgb(58, 58, 58);
+
   color: white;
   outline: none;
   border: none;
@@ -83,7 +94,7 @@ input {
 }
 
 button {
-  background-color: #282c34; /* Green */
+  background-color: transparent;
   border: none;
   color: white;
   padding: 15px 32px;
@@ -152,4 +163,3 @@ img {
   border-radius: 50%;
   margin: 2px 5px;
 }
-

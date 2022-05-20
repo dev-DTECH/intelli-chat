@@ -1,5 +1,5 @@
 import React, {useRef, useState, Component} from 'react';
-import './App.css';
+import './App.scss';
 import io from 'socket.io-client'
 
 import firebase from 'firebase/compat/app';
@@ -71,7 +71,13 @@ function SignIn() {
 
 function SignOut() {
     return auth.currentUser && (
-        <button className="sign-out" onClick={() => auth.signOut()}>Sign Out</button>
+        <button className="sign-out profile" onClick={() => auth.signOut()}>
+            <img src={auth.currentUser.photoURL}/>
+            <div>
+                {auth.currentUser.displayName}
+
+            </div>
+        </button>
     )
 }
 

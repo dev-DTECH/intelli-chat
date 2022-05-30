@@ -45,9 +45,9 @@ body {
 main {
   background-color: rgb(54, 50, 47);
   border-radius: 10px;
-  padding: 10px;
+  padding: 0 10px;
   height: 80vh;
-  margin: 10vh 0 10vh;
+  margin: 10vh 0 ;
   overflow-y: scroll;
   display: flex;
   flex-direction: column;
@@ -71,6 +71,7 @@ form {
   bottom: 0;
   background-color: rgb(24, 23, 23);
   width: 100%;
+
   //max-width: 728px;
   display: flex;
   font-size: 1.5rem;
@@ -87,7 +88,7 @@ input {
   width: 100%;
   font-size: 1.5rem;
 
-  color: white;
+  color: black;
   outline: none;
   border: none;
   padding: 0 10px;

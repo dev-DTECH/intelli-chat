@@ -105,7 +105,7 @@ class ChatRoom extends Component {
 
     receiveMessage(data) {
         this.state.messages.push({
-            text: data.message,
+            text: data.text,
             uid: data.uid,
             photoURL: data.photoURL
         })
@@ -121,8 +121,9 @@ class ChatRoom extends Component {
 
         const {uid, displayName, photoURL} = auth.currentUser;
         socket.emit("chat", {
+            uid,
             user: displayName,
-            message: this.state.formValue
+            text: this.state.formValue
         })
         this.state.messages.push({
             text: this.state.formValue,

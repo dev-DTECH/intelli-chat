@@ -1,7 +1,7 @@
 const {Server} = require("socket.io");
 const chalk = require('chalk');
 const {Client} = require('pg')
-const connectionString = process.env.connectionURIś
+const connectionString = process.env.connectionURI
 const PORT = process.env.PORT || 3000,
     express = require('express'),
     fs = require("fs"),

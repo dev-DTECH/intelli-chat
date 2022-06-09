@@ -19,7 +19,7 @@ const client = new Client({
     connectionString
 })
 client.connect()
-client.query('CREATE TABLE IF NOT EXISTS "USER"(UID VARCHAR PRIMARY KEY,NAME VARCHAR,EMAIL VARCHAR)', (err, res) => {
+client.query('CREATE TABLE IF NOT EXISTS "USER"(UID VARCHAR PRIMARY KEY,NAME VARCHAR,EMAIL VARCHAR,PHOTO_URL VARCHAR)', (err, res) => {
     if(err){
         console.error(err);
         return;
@@ -55,19 +55,25 @@ io.on("connection", socket => {
         console.log(data);
         authorisedUser[`${socket.id}`] = data;
         console.log(`[${chalk.green("+")}] [${data.name}]`)
-        client.query(`INSERT INTO "USER" VALUES ('${data.uid}','${data.name}','${data.email}') ON CONFLICT (UID) DO NOTHING`, (err, res) => {
+        client.query(`
+INSERT INTO "USER" VALUES ('${data.uid}','${data.name}','${data.email}','${data.photoURL}') 
+ON CONFLICT (UID)
+DO
+UPDATE SET NAME='${data.name}' ,EMAIL='${data.email}', PHOTO_URL='${data.photoURL}'
+`, (err, res) => {
             if(err){
                 console.error(err);
                 return;
             }
         })
-        client.query('SELECT * FROM "CHAT" ORDER BY MID DESC LIMIT 10', (err, res) => {
+        client.query('SELECT C.mid,C.uid,C.created_at,C.text,U.name,U.photo_url FROM "CHAT" C JOIN "USER" U on C.uid = U.uid ORDER BY MID DESC LIMIT 10;', (err, res) => {
             if(err){
                 console.error(err);
                 return;
             }
             res.rows.slice().reverse()
                 .forEach(function(ele) {
+                    ele.photoURL=ele.photo_url
                     socket.emit("chat",ele)
                 });
             // console.log(res.rows);
